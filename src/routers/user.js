@@ -12,9 +12,18 @@ const express = require("express");
 const userRouter = express.Router();
 
 //parameter setting
-userRouter.param("id", (req, res, next, value) => {
-  req.user = users[value];
-  next();
+userRouter.param("id", async (req, res, next, value) => {
+  try {
+    if (!users.hasOwnProperty(value)) {
+      const err = new Error("user not found");
+      err.statusCode = 404;
+      throw err;
+    }
+
+    req.user = users[value];
+  } catch (e) {
+    next(e);
+  }
 });
 
 //user routing

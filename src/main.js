@@ -20,6 +20,12 @@ app.set("views", "src/views");
 app.use("/", router.dashRouter);
 app.use("/users", router.userRouter);
 
+//error handling
+app.use((err, req, res, next) => {
+  res.statusCode = err.statusCode || 500;
+  res.send(err.message);
+});
+
 app.listen(PORT, () => {
   console.log(`The Express server is listening at Port : ${PORT}`);
 });
